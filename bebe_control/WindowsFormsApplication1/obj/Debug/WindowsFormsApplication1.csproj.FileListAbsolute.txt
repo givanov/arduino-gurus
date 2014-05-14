@@ -7,3 +7,15 @@ c:\users\georgi\documents\visual studio 2013\Projects\WindowsFormsApplication1\W
 c:\users\georgi\documents\visual studio 2013\Projects\WindowsFormsApplication1\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.exe
 c:\users\georgi\documents\visual studio 2013\Projects\WindowsFormsApplication1\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.pdb
 c:\users\georgi\documents\visual studio 2013\Projects\WindowsFormsApplication1\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Form1.resources
+C:\Users\Georgi\Documents\Visual Studio 2013\Projects\bebe_control\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.exe.config
+C:\Users\Georgi\Documents\Visual Studio 2013\Projects\bebe_control\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.exe
+C:\Users\Georgi\Documents\Visual Studio 2013\Projects\bebe_control\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.pdb
+C:\Users\Georgi\Documents\Visual Studio 2013\Projects\bebe_control\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.exe
+C:\Users\Georgi\Documents\Visual Studio 2013\Projects\bebe_control\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.pdb
+C:\Users\Georgi\Documents\Visual Studio 2013\Projects\bebe_control\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.csprojResolveAssemblyReference.cache
+C:\Users\Georgi\Documents\Visual Studio 2013\Projects\bebe_control\WindowsFormsApplication1\obj\Debug\Interop.BtContextMenuLib.dll
+C:\Users\Georgi\Documents\Visual Studio 2013\Projects\bebe_control\WindowsFormsApplication1\obj\Debug\Interop.BtvAppExtLib.dll
+C:\Users\Georgi\Documents\Visual Studio 2013\Projects\bebe_control\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.csproj.ResolveComReference.cache
+C:\Users\Georgi\Documents\Visual Studio 2013\Projects\bebe_control\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Form1.resources
+C:\Users\Georgi\Documents\Visual Studio 2013\Projects\bebe_control\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Properties.Resources.resources
+C:\Users\Georgi\Documents\Visual Studio 2013\Projects\bebe_control\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.csproj.GenerateResource.Cache
