@@ -17,8 +17,8 @@ namespace WindowsFormsApplication1
     
     public partial class Form1 : Form
     {
-        public Boolean open = true;
-        ArduinoControllerMain asd = new ArduinoControllerMain(true);
+        public Boolean port_open = false;
+        ArduinoControllerMain bebe_comms = new ArduinoControllerMain(false);
         int dirA, dirB, speedA, speedB;
        
 
@@ -27,7 +27,7 @@ namespace WindowsFormsApplication1
             this.KeyPreview = true;
             InitializeComponent();
             this.KeyDown += new KeyEventHandler(Form1_KeyDown);
-            asd.SetComPort(1, 0, 1, 0);
+            bebe_comms.SetComPort();
             dirA = 1;
             dirB = 1;
             speedA = 100;
@@ -41,32 +41,32 @@ namespace WindowsFormsApplication1
             int speedB_new = 0;
             speedA += 50;
             speedB += 50;
-            if (speedA > 0)
+            if (speedA > 0 && speedA<100)
+            {
+                dirA = 1;
+                speedA_new = 100;
+            }
+            else
             {
                 dirA = 1;
                 speedA_new = speedA;
             }
-            else
+            if (speedB > 0 && speedB < 100)
             {
-                dirA = 0;
-                speedA_new = -speedA;
+                dirB = 1;
+                speedB_new = 100;
             }
-            if (speedB > 0)
+            else
             {
                 dirB = 1;
                 speedB_new = speedB;
-            }
-            else
-            {
-                dirB = 0;
-                speedB_new = -speedB;
             }
 
             if (speedA_new <= 100) speedA_new = 100;
             if (speedB_new <= 100) speedB_new = 100;
             if (speedA_new > 255) speedA_new = 240;
             if (speedB_new > 255) speedB_new = 240;
-            asd.DetectArduino(dirA, speedA_new, dirB, speedB_new);
+            bebe_comms.SetSpeed(dirA, speedA_new, dirB, speedB_new);
             Thread.Sleep(100);
         }
 
@@ -82,7 +82,7 @@ namespace WindowsFormsApplication1
             speedB = -100;
             else
                 speedA = 100;
-            asd.DetectArduino(1, 000, 1, 0);
+            bebe_comms.SetSpeed(1, 000, 1, 0);
             Thread.Sleep(100);
         }
 
@@ -117,7 +117,7 @@ namespace WindowsFormsApplication1
             if (speedB_new <= 100) speedB_new = 100;
             if (speedA_new > 255) speedA_new = 240;
             if (speedB_new > 255) speedB_new = 240;
-            asd.DetectArduino(dirA, speedA_new, dirB, speedB_new);
+            bebe_comms.SetSpeed(dirA, speedA_new, dirB, speedB_new);
             Thread.Sleep(100);
         }
 
@@ -125,7 +125,7 @@ namespace WindowsFormsApplication1
         {
             speedA = 100;
             speedB = 100;// ArduinoControllerMain asd = new ArduinoControllerMain(true);
-            asd.DetectArduino(1, 107, 1, 207);
+            bebe_comms.SetSpeed(1, 107, 1, 207);
             Thread.Sleep(100);
         }
 
@@ -133,7 +133,7 @@ namespace WindowsFormsApplication1
         {
             speedA = 100;
             speedB = 100;
-            asd.DetectArduino(1, 207, 1, 107);
+            bebe_comms.SetSpeed(1, 207, 1, 107);
             Thread.Sleep(100);
         }
         private void Form1_KeyDown(object sender, KeyEventArgs e)
@@ -167,7 +167,7 @@ namespace WindowsFormsApplication1
     }
     public class ArduinoControllerMain
     {
-        bool open;
+        bool port_open;
         SerialPort currentPort;
         bool portFound;
         private bool p;
@@ -175,41 +175,109 @@ namespace WindowsFormsApplication1
         public ArduinoControllerMain(bool p)
         {
             // TODO: Complete member initialization
-            open = p;
+            port_open = p;
         }
         
-        public void SetComPort(int dirA, int s1, int dirB, int s2)
+        public void SetComPort()
         {
             try
             {
                 string[] ports = SerialPort.GetPortNames();
-                double s2p = 0.87 * s2;
-                s2 = (int)Math.Floor(s2p);
-                Debug.Print(s2.ToString());
+                //double s2p = 0.87 * s2;
+                //s2 = (int)Math.Floor(s2p);
+                
                 foreach (string port in ports)
                 {
+                    Debug.Print(port.ToString());
                     currentPort = new SerialPort(port, 9600);
-                    if (DetectArduino(dirA, s1,dirB, s2))
+                    if (DetectArduino())
                     {
+                        
                         portFound = true;
+                        //currentPort.Open();
                         break;
                     }
                     else
                     {
                         portFound = false;
+                        currentPort.Close();
+                       // port_open = true;
+                        //currentPort.Close();
                     }
+                    Debug.WriteLine("port is found: " + portFound);
                 }
             }
             catch (Exception e)
             {
             }
         }
-        public bool DetectArduino(int dirA, int s1a, int dirB, int s2a)
+        public bool DetectArduino()
+        {
+            
+            byte[] buffer = new byte[1];
+            buffer[0] = Convert.ToByte(1);
+            try
+            {
+                currentPort.Open();
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+                int elapsed = 0;
+            int timeout = 10;
+            try
+            {
+                currentPort.Write(buffer, 0, 1);
+                elapsed = 0;
+                //retry for 10 seconds
+                timeout = 10;
+                Debug.WriteLine("sending bytes");
+                while (currentPort.BytesToWrite > 0 && (elapsed < timeout))
+                {
+                    currentPort.Write(buffer, 0, 1);
+                    Thread.Sleep(1000);
+                    elapsed++;
+                }
+            }
+            catch (Exception e)
+            { }
+            int count = currentPort.BytesToRead;
+            elapsed = 0;
+            Debug.WriteLine("receiving bytes");
+            while (count == 0 && (elapsed < timeout) ) {
+                count = currentPort.BytesToRead;
+                Thread.Sleep(1000);
+                elapsed++;
+            }
+            int response = 0;
+            currentPort.ReadTimeout = 10000;
+            try
+            {
+                 response = currentPort.ReadByte();
+            }
+            catch (Exception e)
+            { }
+
+            Debug.WriteLine("received: " + response);
+            if (response == 1)
+            {
+                
+                return true;
+            }
+            else
+            {
+                
+                return false;
+            }
+
+            
+        }
+        public void SetSpeed(int dirA, int s1a, int dirB, int s2a)
         {
             try
             {
-                //if (currentPort.BytesToWrite > 0)
-                //currentPort.DiscardOutBuffer();
+                
                 //The below setting are for the Hello handshake
                 byte[] buffer = new byte[8];
                 buffer[0] = Convert.ToByte(dirA);
@@ -223,25 +291,29 @@ namespace WindowsFormsApplication1
                 int intReturnASCII = 0;
                 char charReturnValue = (Char)intReturnASCII;
                 Debug.WriteLine("open");
-                if (open)
+                /*if (!port_open)
                 {
-                    Debug.WriteLine(open);
-                    open = false;
+                    Debug.WriteLine(port_open);
+                    port_open = false;
                     currentPort.Open();
-                    Debug.WriteLine(open);
-                }
+                    Debug.WriteLine(port_open);
+                }*/
                 Debug.WriteLine("yes");
                 currentPort.Write(buffer, 0, 8);
                 while (currentPort.BytesToWrite > 0) ;
                 Thread.Sleep(200);
-                int count = currentPort.BytesToRead;
-                int returnMessage = -1;
+                //int count = currentPort.BytesToRead;
+                //int returnMessage = -1;
                /* while (count > 0)
                 {
                     intReturnASCII = currentPort.ReadByte();
                     returnMessage = returnMessage + Convert.ToInt32(intReturnASCII);
                     count--;
-                }*/
+                }
+                if(returnMessage == -1)
+                Debug.WriteLine("paketo e ok");
+                else
+                    Debug.WriteLine("paketo go nema");
                 //ComPort.name = returnMessage;
                 //currentPort.Close();
                 if (returnMessage==1)
@@ -250,13 +322,13 @@ namespace WindowsFormsApplication1
                 }
                 else
                 {
-                    currentPort.Write(buffer, 0, 8);
+                    //currentPort.Write(buffer, 0, 8);
                     return false;
-                }
+                }*/
             }
             catch (Exception e)
             {
-                return false;
+                //return false;
             }
         }
     }
