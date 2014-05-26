@@ -183,29 +183,28 @@ namespace WindowsFormsApplication1
             try
             {
                 string[] ports = SerialPort.GetPortNames();
-                //double s2p = 0.87 * s2;
-                //s2 = (int)Math.Floor(s2p);
                 
+
                 foreach (string port in ports)
                 {
-                    Debug.Print(port.ToString());
-                    currentPort = new SerialPort(port, 9600);
-                    if (DetectArduino())
-                    {
-                        
-                        portFound = true;
-                        //currentPort.Open();
-                        break;
+                   
+                        Debug.Print(port.ToString());
+                        currentPort = new SerialPort(port, 9600);
+                        if (DetectArduino())
+                        {
+
+                            portFound = true;
+                            //currentPort.Open();
+                            break;
+                        }
+                        else
+                        {
+                            portFound = false;
+                            currentPort.Close();
+                        }
+                        Debug.WriteLine("port is found: " + portFound);
                     }
-                    else
-                    {
-                        portFound = false;
-                        currentPort.Close();
-                       // port_open = true;
-                        //currentPort.Close();
-                    }
-                    Debug.WriteLine("port is found: " + portFound);
-                }
+               
             }
             catch (Exception e)
             {
@@ -281,13 +280,10 @@ namespace WindowsFormsApplication1
                 //The below setting are for the Hello handshake
                 byte[] buffer = new byte[8];
                 buffer[0] = Convert.ToByte(dirA);
-                buffer[1] = Convert.ToByte(s1a/100);
-                buffer[2] = Convert.ToByte(s1a/10%10);
-                buffer[3] = Convert.ToByte(s1a%10);
-                buffer[4] = Convert.ToByte(dirB);
-                buffer[5] = Convert.ToByte(s2a/100);
-                buffer[6] = Convert.ToByte(s2a/10%10);
-                buffer[7] = Convert.ToByte(s2a%10);
+                buffer[1] = Convert.ToByte(s1a);
+                buffer[2] = Convert.ToByte(dirB);
+                buffer[3] = Convert.ToByte(s2a);
+               
                 int intReturnASCII = 0;
                 char charReturnValue = (Char)intReturnASCII;
                 Debug.WriteLine("open");
@@ -299,7 +295,7 @@ namespace WindowsFormsApplication1
                     Debug.WriteLine(port_open);
                 }*/
                 Debug.WriteLine("yes");
-                currentPort.Write(buffer, 0, 8);
+                currentPort.Write(buffer, 0, 4);
                 while (currentPort.BytesToWrite > 0) ;
                 Thread.Sleep(200);
                 //int count = currentPort.BytesToRead;
