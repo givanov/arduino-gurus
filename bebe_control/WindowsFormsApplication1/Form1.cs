@@ -50,7 +50,7 @@ namespace WindowsFormsApplication1
         // Forward 
         private void button1_Click(object sender, EventArgs e)
         {
-
+            label3.Text = speedA.ToString();
             dirA = 1;
             dirB = 1;
             bebe_comms.SetSpeed(dirA, speedA, dirB, speedB);
@@ -119,47 +119,49 @@ namespace WindowsFormsApplication1
         // Key Press Handlers.
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Add)
-            {
-                e.Handled = false;
-                if (hScrollBar1.Value < 250)
+                
+                if (e.KeyCode == Keys.Add)
                 {
-                    hScrollBar1.Value = hScrollBar1.Value + 1;
+                    e.Handled = false;
+                    if (hScrollBar1.Value < 250)
+                    {
+                        hScrollBar1.Value = hScrollBar1.Value + 1;
+                    }
                 }
-            }
-            if (e.KeyCode == Keys.Subtract)
-            {
-                e.Handled = false;
-                if (hScrollBar1.Value >100)
+                if (e.KeyCode == Keys.Subtract)
                 {
-                    hScrollBar1.Value = hScrollBar1.Value - 1;
+                    e.Handled = false;
+                    if (hScrollBar1.Value > 100)
+                    {
+                        hScrollBar1.Value = hScrollBar1.Value - 1;
+                    }
                 }
-            }
-            if (e.KeyCode == Keys.W)
-            {
-                e.Handled = false;
-                button1.PerformClick();
-            }
-            if (e.KeyCode == Keys.B)
-            {
-                e.Handled = false;
-                button2.PerformClick();
-            }
-            if (e.KeyCode == Keys.S)
-            {
-                e.Handled = false;
-                button3.PerformClick();
-            }
-            if (e.KeyCode == Keys.A)
-            {
-                e.Handled = false;
-                button4.PerformClick();
-            }
-            if (e.KeyCode == Keys.D)
-            {
-                e.Handled = false;
-                button5.PerformClick();
-            }
+                if (e.KeyCode == Keys.W)
+                {
+                    e.Handled = false;
+                    button1.PerformClick();
+                }
+                if (e.KeyCode == Keys.B)
+                {
+                    e.Handled = false;
+                    button2.PerformClick();
+                }
+                if (e.KeyCode == Keys.S)
+                {
+                    e.Handled = false;
+                    button3.PerformClick();
+                }
+                if (e.KeyCode == Keys.A)
+                {
+                    e.Handled = false;
+                    button4.PerformClick();
+                }
+                if (e.KeyCode == Keys.D)
+                {
+                    e.Handled = false;
+                    button5.PerformClick();
+                }
+           
 
         }
 
