@@ -11,6 +11,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+
+/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+///////////////// TODO make acknoledgement for commands .!!!/////////////////
+/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+
 namespace WindowsFormsApplication1
 {
   
@@ -27,123 +34,108 @@ namespace WindowsFormsApplication1
             this.KeyPreview = true;
             InitializeComponent();
             this.KeyDown += new KeyEventHandler(Form1_KeyDown);
-            bebe_comms.SetComPort();
+           
             dirA = 1;
             dirB = 1;
-            speedA = 100;
-            speedB = 100;
+            label2.Text = "Current speed:" + hScrollBar1.Value.ToString();
+            speedA = hScrollBar1.Value;
+            speedB = hScrollBar1.Value;
         }
 
+
+        //////////////////////////////////////////////////////// 
+        ///            BUTTONS CODE HERE                   ////
+        ///////////////////////////////////////////////////////
+        
+        // Forward 
         private void button1_Click(object sender, EventArgs e)
         {
-           //ArduinoControllerMain asd = new ArduinoControllerMain(true);
-            int speedA_new = 0;
-            int speedB_new = 0;
-            speedA += 50;
-            speedB += 50;
-            if (speedA > 0 && speedA<100)
-            {
-                dirA = 1;
-                speedA_new = 100;
-            }
-            else
-            {
-                dirA = 1;
-                speedA_new = speedA;
-            }
-            if (speedB > 0 && speedB < 100)
-            {
-                dirB = 1;
-                speedB_new = 100;
-            }
-            else
-            {
-                dirB = 1;
-                speedB_new = speedB;
-            }
 
-            if (speedA_new <= 100) speedA_new = 100;
-            if (speedB_new <= 100) speedB_new = 100;
-            if (speedA_new > 255) speedA_new = 240;
-            if (speedB_new > 255) speedB_new = 240;
-            bebe_comms.SetSpeed(dirA, speedA_new, dirB, speedB_new);
+            dirA = 1;
+            dirB = 1;
+            bebe_comms.SetSpeed(dirA, speedA, dirB, speedB);
             Thread.Sleep(100);
         }
-
+        // Break
         private void button2_Click(object sender, EventArgs e)
         {
-           // ArduinoControllerMain asd = new ArduinoControllerMain(true);
-            //asd.SetComPort(1, 0, 1, 0);
-            if(speedA<0)
-            speedA = -100;
-            else
-                speedA = 100;
-            if(speedB<0)
-            speedB = -100;
-            else
-                speedA = 100;
-            bebe_comms.SetSpeed(1, 000, 1, 0);
+
+            bebe_comms.SetSpeed(1, 0, 1, 0);
             Thread.Sleep(100);
         }
-
+        // Backward
         private void button3_Click(object sender, EventArgs e)
         {
-            //ArduinoControllerMain asd = new ArduinoControllerMain(true);
-            int speedA_new = 0;
-            int speedB_new = 0;
-            speedA -= 50;
-            speedB -= 50;
-            if (speedA > 0)
-            {
-                dirA = 1;
-                speedA_new = speedA;
-            }
-            else
-            {
-                dirA = 0;
-                speedA_new = -speedA;
-            }
-            if (speedB > 0)
-            {
-                dirB = 1;
-                speedB_new = speedB;
-            }
-            else
-            {
-                dirB = 0;
-                speedB_new = -speedB;
-            }
-            if (speedA_new <= 100) speedA_new = 100;
-            if (speedB_new <= 100) speedB_new = 100;
-            if (speedA_new > 255) speedA_new = 240;
-            if (speedB_new > 255) speedB_new = 240;
-            bebe_comms.SetSpeed(dirA, speedA_new, dirB, speedB_new);
+            dirA = 0;
+            dirB = 0;
+            bebe_comms.SetSpeed(dirA, speedA, dirB, speedB);
             Thread.Sleep(100);
         }
-
+        // Turn Left
         private void button4_Click(object sender, EventArgs e)
         {
-            speedA = 100;
-            speedB = 100;// ArduinoControllerMain asd = new ArduinoControllerMain(true);
-            bebe_comms.SetSpeed(1, 107, 1, 207);
+            int new_speedA = Convert.ToInt32(speedA * 0.5);
+            bebe_comms.SetSpeed(dirA, new_speedA, dirB, speedB);
             Thread.Sleep(100);
         }
-
+        // Turn Right
         private void button5_Click(object sender, EventArgs e)
         {
-            speedA = 100;
-            speedB = 100;
-            bebe_comms.SetSpeed(1, 207, 1, 107);
+            int new_speedB = Convert.ToInt32(speedB * 0.5);
+            bebe_comms.SetSpeed(dirA, speedA, dirB, new_speedB);
             Thread.Sleep(100);
         }
+        // Connect
+        private void button6_Click(object sender, EventArgs e)
+        {
+           
+            if (bebe_comms.SetComPort())
+            {
+                label1.Text = "Connected!";
+            } 
+
+        }
+        // Disconnect
+        private void button7_Click(object sender, EventArgs e)
+        {
+            if (bebe_comms.DisconnectArduino())
+            {
+                label1.Text = "Disconnected!";
+            } 
+        }
+
+        private void hScrollBar1_ValueChanged(object sender, EventArgs e)
+        {
+            speedA = hScrollBar1.Value;
+            speedB = hScrollBar1.Value;
+            label2.Text = "Current speed:" + hScrollBar1.Value.ToString();
+        }
+
+        // Key Press Handlers.
         private void Form1_KeyDown(object sender, KeyEventArgs e)
         {
+            if (e.KeyCode == Keys.Add)
+            {
+                e.Handled = false;
+                if (hScrollBar1.Value < 250)
+                {
+                    hScrollBar1.Value = hScrollBar1.Value + 1;
+                }
+            }
+            if (e.KeyCode == Keys.Subtract)
+            {
+                e.Handled = false;
+                if (hScrollBar1.Value >100)
+                {
+                    hScrollBar1.Value = hScrollBar1.Value - 1;
+                }
+            }
             if (e.KeyCode == Keys.W)
             {
                 e.Handled = false;
                 button1.PerformClick();
             }
-            if (e.KeyCode == Keys.Space)
+            if (e.KeyCode == Keys.B)
             {
                 e.Handled = false;
                 button2.PerformClick();
@@ -163,13 +155,18 @@ namespace WindowsFormsApplication1
                 e.Handled = false;
                 button5.PerformClick();
             }
+
         }
-    }
+
+}
+    //////////////////////////////////////////////////////// 
+    ///            ARDUINO CODE HERE                   ////
+    ///////////////////////////////////////////////////////
+
     public class ArduinoControllerMain
     {
         bool port_open;
-        SerialPort currentPort;
-        bool portFound;
+        public SerialPort currentPort;
         private bool p;
 
         public ArduinoControllerMain(bool p)
@@ -178,13 +175,28 @@ namespace WindowsFormsApplication1
             port_open = p;
         }
         
-        public void SetComPort()
+        public bool DisconnectArduino()
         {
+            SetSpeed(0, 0, 0, 0);
+            try
+            {
+                currentPort.Close();
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+           
+        }
+        public bool SetComPort()
+        {
+          
             try
             {
                 string[] ports = SerialPort.GetPortNames();
-                
 
+                // Scan through the available ports.
                 foreach (string port in ports)
                 {
                    
@@ -192,24 +204,25 @@ namespace WindowsFormsApplication1
                         currentPort = new SerialPort(port, 9600);
                         if (DetectArduino())
                         {
-
-                            portFound = true;
-                            //currentPort.Open();
-                            break;
+                            return true;
                         }
                         else
                         {
-                            portFound = false;
                             currentPort.Close();
                         }
-                        Debug.WriteLine("port is found: " + portFound);
-                    }
+                       
+               }
                
             }
             catch (Exception e)
             {
+                
             }
+          
+            return false;
         }
+
+// Function checking for arduino port.
         public bool DetectArduino()
         {
             
@@ -223,15 +236,12 @@ namespace WindowsFormsApplication1
             {
                 return false;
             }
-                int elapsed = 0;
+            
+            int elapsed = 0;
             int timeout = 10;
             try
             {
                 currentPort.Write(buffer, 0, 1);
-                elapsed = 0;
-                //retry for 10 seconds
-                timeout = 10;
-                Debug.WriteLine("sending bytes");
                 while (currentPort.BytesToWrite > 0 && (elapsed < timeout))
                 {
                     currentPort.Write(buffer, 0, 1);
@@ -243,7 +253,7 @@ namespace WindowsFormsApplication1
             { }
             int count = currentPort.BytesToRead;
             elapsed = 0;
-            Debug.WriteLine("receiving bytes");
+           
             while (count == 0 && (elapsed < timeout) ) {
                 count = currentPort.BytesToRead;
                 Thread.Sleep(1000);
@@ -256,75 +266,42 @@ namespace WindowsFormsApplication1
                  response = currentPort.ReadByte();
             }
             catch (Exception e)
-            { }
+            {
+            }
 
-            Debug.WriteLine("received: " + response);
             if (response == 1)
             {
-                
                 return true;
             }
             else
             {
-                
                 return false;
             }
 
             
         }
-        public void SetSpeed(int dirA, int s1a, int dirB, int s2a)
+  
+// Set Speeds Method.
+        public void SetSpeed(int dirA, int speedA, int dirB, int speedB)
         {
             try
             {
                 
-                //The below setting are for the Hello handshake
                 byte[] buffer = new byte[8];
+                
                 buffer[0] = Convert.ToByte(dirA);
-                buffer[1] = Convert.ToByte(s1a);
+                buffer[1] = Convert.ToByte(speedA);
                 buffer[2] = Convert.ToByte(dirB);
-                buffer[3] = Convert.ToByte(s2a);
+                buffer[3] = Convert.ToByte(speedB);
                
-                int intReturnASCII = 0;
-                char charReturnValue = (Char)intReturnASCII;
-                Debug.WriteLine("open");
-                /*if (!port_open)
-                {
-                    Debug.WriteLine(port_open);
-                    port_open = false;
-                    currentPort.Open();
-                    Debug.WriteLine(port_open);
-                }*/
-                Debug.WriteLine("yes");
                 currentPort.Write(buffer, 0, 4);
+              
                 while (currentPort.BytesToWrite > 0) ;
                 Thread.Sleep(200);
-                //int count = currentPort.BytesToRead;
-                //int returnMessage = -1;
-               /* while (count > 0)
-                {
-                    intReturnASCII = currentPort.ReadByte();
-                    returnMessage = returnMessage + Convert.ToInt32(intReturnASCII);
-                    count--;
-                }
-                if(returnMessage == -1)
-                Debug.WriteLine("paketo e ok");
-                else
-                    Debug.WriteLine("paketo go nema");
-                //ComPort.name = returnMessage;
-                //currentPort.Close();
-                if (returnMessage==1)
-                {
-                    return true;
-                }
-                else
-                {
-                    //currentPort.Write(buffer, 0, 8);
-                    return false;
-                }*/
+                
             }
             catch (Exception e)
             {
-                //return false;
             }
         }
     }
