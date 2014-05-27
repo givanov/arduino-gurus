@@ -20,7 +20,6 @@ C:\Users\Georgi\Documents\Visual Studio 2013\Projects\bebe_control\WindowsFormsA
 C:\Users\Georgi\Documents\Visual Studio 2013\Projects\bebe_control\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Properties.Resources.resources
 C:\Users\Georgi\Documents\Visual Studio 2013\Projects\bebe_control\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.csproj.GenerateResource.Cache
 C:\Users\Georgi\Documents\GitHub\arduino-gurus\bebe_control\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.exe.config
-C:\Users\Georgi\Documents\GitHub\arduino-gurus\bebe_control\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.csproj.ResolveComReference.cache
 C:\Users\Georgi\Documents\GitHub\arduino-gurus\bebe_control\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.exe
 C:\Users\Georgi\Documents\GitHub\arduino-gurus\bebe_control\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.pdb
 C:\Users\Georgi\Documents\GitHub\arduino-gurus\bebe_control\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.exe

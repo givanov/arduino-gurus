@@ -25,7 +25,7 @@ namespace WindowsFormsApplication1
     public partial class Form1 : Form
     {
         public Boolean port_open = false;
-        ArduinoControllerMain bebe_comms = new ArduinoControllerMain(false);
+        ArduinoControllerMain bebe_comms = new ArduinoControllerMain();
         int dirA, dirB, speedA, speedB;
        
 
@@ -88,11 +88,15 @@ namespace WindowsFormsApplication1
         // Connect
         private void button6_Click(object sender, EventArgs e)
         {
-           
+           if (label1.Text.Equals("Connected!"))
+           {
+           } 
+           else{
             if (bebe_comms.SetComPort())
             {
                 label1.Text = "Connected!";
             } 
+           }
 
         }
         // Disconnect
@@ -104,6 +108,7 @@ namespace WindowsFormsApplication1
             } 
         }
 
+        // Scroll Bar value events
         private void hScrollBar1_ValueChanged(object sender, EventArgs e)
         {
             speedA = hScrollBar1.Value;
@@ -165,14 +170,12 @@ namespace WindowsFormsApplication1
 
     public class ArduinoControllerMain
     {
-        bool port_open;
+        
         public SerialPort currentPort;
-        private bool p;
-
-        public ArduinoControllerMain(bool p)
+        
+        public ArduinoControllerMain()
         {
-            // TODO: Complete member initialization
-            port_open = p;
+            
         }
         
         public bool DisconnectArduino()
