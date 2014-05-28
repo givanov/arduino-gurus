@@ -46,16 +46,21 @@ namespace WindowsFormsApplication1
         //////////////////////////////////////////////////////// 
         ///            BUTTONS CODE HERE                   ////
         ///////////////////////////////////////////////////////
-        
+
         // Forward 
         private void button1_Click(object sender, EventArgs e)
         {
-            label3.Text = speedA.ToString();
-            dirA = 1;
-            dirB = 1;
-            bebe_comms.SetSpeed(dirA, speedA, dirB, speedB);
+
+                label3.Text = "Left Wheel speed: " + speedA.ToString() + " Right Wheel speed: " + speedB.ToString();
+                dirA = 1;
+                dirB = 1;
+                bebe_comms.SetSpeed(dirA, speedA, dirB, speedB);
+            
+            speedA = hScrollBar1.Value;
+            speedB = hScrollBar1.Value;
             Thread.Sleep(100);
         }
+  
         // Break
         private void button2_Click(object sender, EventArgs e)
         {
@@ -66,24 +71,26 @@ namespace WindowsFormsApplication1
         // Backward
         private void button3_Click(object sender, EventArgs e)
         {
+            label3.Text = "Left Wheel speed: -" + speedA.ToString() + " Right Wheel speed:  -" + speedB.ToString();
             dirA = 0;
             dirB = 0;
+            
             bebe_comms.SetSpeed(dirA, speedA, dirB, speedB);
+            speedA = hScrollBar1.Value;
+            speedB = hScrollBar1.Value;
+
             Thread.Sleep(100);
         }
         // Turn Left
         private void button4_Click(object sender, EventArgs e)
         {
-            int new_speedA = Convert.ToInt32(speedA * 0.5);
-            bebe_comms.SetSpeed(dirA, new_speedA, dirB, speedB);
-            Thread.Sleep(100);
+            speedA = Convert.ToInt32(hScrollBar1.Value * 0.5);
+            
         }
         // Turn Right
         private void button5_Click(object sender, EventArgs e)
         {
-            int new_speedB = Convert.ToInt32(speedB * 0.5);
-            bebe_comms.SetSpeed(dirA, speedA, dirB, new_speedB);
-            Thread.Sleep(100);
+            speedB = Convert.ToInt32(hScrollBar1.Value * 0.5);
         }
         // Connect
         private void button6_Click(object sender, EventArgs e)
@@ -140,6 +147,7 @@ namespace WindowsFormsApplication1
                 {
                     e.Handled = false;
                     button1.PerformClick();
+                    
                 }
                 if (e.KeyCode == Keys.B)
                 {
